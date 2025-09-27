@@ -21,7 +21,7 @@ addons:
 before_script:
 - sudo rm -rf /usr/local/cmake-* # workaround to remove default cmake that has priority in PATH
 script:
-- git clone https://github.com/DolceSDK/buildscripts.git
+- git clone https://github.com/DolceSDK2/buildscripts.git
 - "bash ./build.sh"
 deploy:
   provider: releases
@@ -32,7 +32,7 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    repo: DolceSDK/autobuilds
+    repo: DolceSDK2/autobuilds
 branches:
   only:
   - "/^build-.*$/"
