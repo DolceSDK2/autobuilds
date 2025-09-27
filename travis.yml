@@ -1,0 +1,38 @@
+language: cpp
+os: linux
+dist: bionic
+osx_image: xcode11.3
+jobs:
+  include:
+  - os: linux
+  - os: linux
+    dist: bionic
+    env: SDK_TARGET=WIN
+  - os: osx
+addons:
+  apt:
+    sources:
+    - sourceline: 'deb https://apt.kitware.com/ubuntu/ bionic main'
+      key_url: 'https://apt.kitware.com/keys/kitware-archive-latest.asc'
+    packages:
+    - cmake
+    - texinfo
+    - g++-mingw-w64
+before_script:
+- sudo rm -rf /usr/local/cmake-* # workaround to remove default cmake that has priority in PATH
+script:
+- git clone https://github.com/DolceSDK/buildscripts.git
+- "bash ./build.sh"
+deploy:
+  provider: releases
+  token:
+    secure: T/q4ciBCe1/qfGd4j8uOscIKlNAwurtr1BFVjf02esoj59h+AeDQrgW4NciCAbDyx0fHo2Euf3Et/SgoRw8LtwRoU4aLl+I+vkZhLfwWFnFF8m88yUM8XsMaKWhO1SNRS4ptzfnngnXByDbrMQ8w0/qMjSZn7mAYN13a2IxJSbV0U/FUprG0w7zUZb7EPv9tyrhsQmmee2+muLBqd+x3pjIcUlOwWuQ2dp8d47r65XHt63etQfAjVLDGkrfCyzSwIj3MMMZxq0CQjXrGo+DDAuOkX+mIFdmDk08ziwoH6MGJ/GXRyvT9WI6Z+CWCwLWSgasG0gxq7GSlqC3osM9UPH04YAmTe0xrXoiydHUKP0A4h1MkH2Ei+0lrU3W6vVo1BaQsW2o6DaFgDtwMTipNnuDSM0t7BXGtpc8/61Wd6fb6LBCQUdnnnmijSeQ1iQ9BBPqM3EyQNKvO/RSmIDR88RTBYgf5mztUTBof7XpTBsPjw/FUFuxmICiZyj50eK+6wODUjqu7/Jmjo4YHSD3HKyfwc486mDzQ5XChOm0DAqf3sF1FIJsfgUx5u/LbJc5c+g7I/qYl4WzSN+NxUWFoB2vzkBWitYHGamT/+drBAJlvDO9lNckgLa0dZvEaTJk1N12hrpItu34OLSJteU+EZzhvuQl1BGSG0bhn7mCZsqo=
+  file_glob: true
+  file: buildscripts/build/*.tar.bz2
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: DolceSDK/autobuilds
+branches:
+  only:
+  - "/^build-.*$/"
